@@ -19,16 +19,9 @@ from rdkit.Chem import Descriptors
 from rdkit.Chem.rdMolDescriptors import CalcNumAromaticRings
 import urllib.parse
 import webbrowser
-import streamlit as st
-import streamlit.components.v1 as components
 
-# Global styling for consistent UI and chatbot positioning
-import streamlit as st
-import streamlit.components.v1 as components
 
-# Global Styling for UI and Chatbot Positioning
-st.markdown(
-    """
+st.markdown("""
     <style>
         /* Background Styling */
         .stApp {
@@ -37,11 +30,14 @@ st.markdown(
             background-size: 400% 400%;
             font-family: 'Helvetica', sans-serif;
         }
-        h1 { color: #4a4a4a; text-shadow: 1px 1px 3px rgba(0,0,0,0.2); }
+        h1 {
+            color: #4a4a4a;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
 
         /* Button Styling */
         .stButton>button {
-            background-color:rgb(38, 182, 230);
+            background-color: #add8e6;
             border: none;
             padding: 10px 20px;
             color: #ffffff;
@@ -52,27 +48,23 @@ st.markdown(
             transition: 0.3s;
         }
         .stButton>button:hover {
-            background-color:rgb(44, 180, 234);
+            background-color: #87ceeb;
             transform: scale(1.05);
         }
 
-        /* 🚀 FORCE Chatbot to Top-Left Corner */
-        #chatbot-container {
-    position: fixed !important;
-    top: 20px !important;
-    right: 20px !important;  /* ✅ Now placed on the right */
-    width: 400px !important;
-    height: 500px !important;
-    z-index: 1000 !important;
-    background-color: white; /* Just to check if it's rendering properly */
-    border: 2px solid red; /* Temporary border for debugging */
-}
+        /* Input Box Styling */
+        input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        }
     </style>
-    """,
-    unsafe_allow_html=True
-)
+""", unsafe_allow_html=True)
 
-# Chatbot Code (Now Positioned in Top-Left Corner)
+
+
+# Chatbot Code (Embedded in a Fixed Position)
 chatbot_code = """
 <div id="chatbot-container">
     <script>
@@ -112,72 +104,6 @@ chatbot_code = """
 
 # Embed chatbot
 components.html(chatbot_code, height=500, width=400)
-
-
-# Function to display the Welcome page
-def welcome_page():
-    st.markdown("<style>body {background-color: #F0F8FF;}</style>", unsafe_allow_html=True)
-    st.title("Welcome to My Website")
-    
-    # Collect user information
-    username = st.text_input("Enter your Username:")
-    email = st.text_input("Enter your Email:")
-
-    if username and email:
-        st.success(f"Welcome, {username}! We have received your email: {email}.")
-        if st.button("Proceed to Home Page"):
-            return True
-    else:
-        st.warning("Please enter both username and email to proceed.")
-    return False
-
-# Function to display the Home page with key information and image
-def home_page():
-    st.markdown("<style>body {background-color: #FFFAF0;}</style>", unsafe_allow_html=True)
-    st.title("Home Page")
-    
-    # Display key information about the website
-    st.markdown("""
-        ## Key Information About My Website
-        
-        This is a simple website built using Streamlit.
-        
-        - **ADMET Predictor**: Predicts the ADMET properties of compounds.
-        - **Disease Finder**: Helps in finding potential diseases based on symptoms.
-        - **ML Classifier Performance**: Evaluates the performance of machine learning classifiers.
-        - **Molecular Viewer**: Visualizes molecular structures.
-        - **Plot Visualization**: Provides various data visualization tools.
-        
-        The website is designed to assist researchers and students in data analysis and prediction.
-    """)
-    # Display the image
-    st.image('image1.png', caption='Key Features of the Website', use_container_width=True)
-
-    if st.button("Start"):
-        st.session_state.page = "tools"  # Change to tools page for tabs navigation
-
-    # Back Button to navigate to welcome page
-    if st.button("Back to Welcome Page"):
-        st.session_state.page = "welcome"  # Back to the Welcome page
-
-
-# Home Page with Key Information and Image
-def home_page():
-    st.title("Home Page")
-    col1, col2 = st.columns([2, 1])
-    with col1:
-        st.markdown(
-            """
-            ## Key Features
-            - **ADMET Predictor**: Predicts ADMET properties.
-            - **Disease Finder**: Finds potential diseases.
-            - **ML Classifier Performance**: Evaluates classifiers.
-            - **Molecular Viewer**: Visualizes molecules.
-            - **Plot Visualization**: Generates plots.
-            """
-        )
-    with col2:
-        st.image("image1.png", caption="Key Features of the Website", use_container_width=True)
 
 # Function to display the Welcome page
 def welcome_page():
@@ -226,91 +152,34 @@ def home_page():
         st.session_state.page = "welcome"  # Back to the Welcome page
 
 # Tabs-based navigation
-import streamlit as st
-
 def tools_navigation():
     st.markdown("<style>body {background-color: #E6E6FA;}</style>", unsafe_allow_html=True)
+    st.title("Tools")
 
-    # Create a toolbar with tool buttons on the left and "About" on the right
-    col1, col2 = st.columns([6, 1])  # 6:1 ratio pushes "About" to the right
+    # Tabs for different tools
+    tab1, tab2, tab3, tab4, tab5,tab6 = st.tabs(
+    ["ADMET Predictor", "Disease Finder", "ML Classifier Performance", "Molecular Viewer", "Plot Visualization","GO Enrichment Analysis"]
+)
 
-    with col1:
-        st.title("Tools")
 
-    with col2:
-        # Use an actual button for navigation
-        if st.button("About"):
-            st.session_state.selected_tool = "About"
+    # Implement the respective functions for each tool
+    with tab1:
+        admet_predictor()
 
-    # Custom CSS for Equal Button Size
-    st.markdown(
-        """
-        <style>
-            div.stButton > button {
-                width: 170px !important;
-                height: 50px !important;
-                font-size: 16px !important;
-                font-weight: bold !important;
-                text-align: center;
-                background-color: #4CAF50 !important;
-                color: white !important;
-                border-radius: 10px !important;
-                border: none;
-                box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-            }
-            div.stButton > button:hover {
-                background-color: #45a049 !important;
-                transform: scale(1.05);
-            }
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+    with tab2:
+        disease_finder()
 
-    # Create toolbar with tool buttons in one row
-    col1, col2, col3, col4, col5, col6 = st.columns(6)
+    with tab3:
+        ml_classifier_performance()
 
-    with col1:
-        if st.button("ADMET Predictor"):
-            st.session_state.selected_tool = "ADMET Predictor"
+    with tab4:
+        molecular_viewer()
 
-    with col2:
-        if st.button("Disease Finder"):
-            st.session_state.selected_tool = "Disease Finder"
-
-    with col3:
-        if st.button("ML Classifier"):
-            st.session_state.selected_tool = "ML Classifier Performance"
-
-    with col4:
-        if st.button("Molecular Viewer"):
-            st.session_state.selected_tool = "Molecular Viewer"
-
-    with col5:
-        if st.button("Plot Visualization"):
-            st.session_state.selected_tool = "Plot Visualization"
-
-    with col6:
-        if st.button("GO Analysis"):
-            st.session_state.selected_tool = "GO Enrichment Analysis"
-
-    # Render the selected tool
-    if "selected_tool" in st.session_state:
-        if st.session_state.selected_tool == "ADMET Predictor":
-            admet_predictor()
-        elif st.session_state.selected_tool == "Disease Finder":
-            disease_finder()
-        elif st.session_state.selected_tool == "ML Classifier Performance":
-            ml_classifier_performance()
-        elif st.session_state.selected_tool == "Molecular Viewer":
-            molecular_viewer()
-        elif st.session_state.selected_tool == "Plot Visualization":
-            plot_visualization()
-        elif st.session_state.selected_tool == "GO Enrichment Analysis":
-            go_enrichment_analysis()
-        elif st.session_state.selected_tool == "About":
-            about_page()  # Navigates to About Page when clicked
-
+    with tab5:
+        plot_visualization()
+         
+    with tab6:
+        go_enrichment_analysis()
 
 # Function to render ADMET Prediction Tool
 def get_colored_circle(color):
@@ -450,7 +319,6 @@ def admet_predictor():
                 st.error(f"Error processing SMILES: {e}")
         else:
             st.warning("Please enter a valid SMILES notation.")
-            
 
 
     # Function to render Disease Finder Tool
@@ -772,51 +640,7 @@ def go_enrichment_analysis():
         fig = px.bar(go_df, x="GO Term", y="P-value", color="Description", title="GO Enrichment Analysis Results")
         st.plotly_chart(fig)
 
-# About Page Function (Paste this before the main entry point)
-def about_page():
-    st.title("About This Application")
-    
-    st.markdown("""
-        ## 🎉 Thank You for Using **DrugTox Pro**!  
-               Your support means everything to us. 🚀  
-               Keep exploring and making discoveries! 🧬💊
-        
-        This application is designed to assist researchers and students in analyzing biological data with the following tools:
-        
-        - **🧪 ADMET Predictor**: Predicts the ADMET (Absorption, Distribution, Metabolism, Excretion, and Toxicity) properties of compounds.
-        - **🩺 Disease Finder**: Suggests possible diseases based on entered symptoms.
-        - **📊 ML Classifier Performance**: Evaluates and compares different machine learning classifiers.
-        - **🧬 Molecular Viewer**: Displays 2D and 3D molecular structures.
-        - **📉 Plot Visualization**: Generates plots to analyze dataset features.
-        - **🧪 GO Enrichment Analysis**: Performs Gene Ontology (GO) enrichment analysis for biological insights.
-        
-        ---
-        
-        **📌 Developed By:**  
-        - **👩‍💻 Developer:** Vardhi Dimple  
-        - **🧑‍🏫 Guided By:** Dr. Anbarasu  
-
-        ---
-        
-        ### ⭐ Rate This Application
-        """)
-
-    # Star Ratings
-    rating = st.radio(
-        "How would you rate this app?",
-        ("⭐️⭐️⭐️⭐️⭐️ (5 Stars)", "⭐️⭐️⭐️⭐️ (4 Stars)", "⭐️⭐️⭐️ (3 Stars)", "⭐️⭐️ (2 Stars)", "⭐️ (1 Star)")
-    )
-
-    st.success(f"Thank you for your feedback! You rated: {rating}")
-
-    st.markdown("""
-        ---
-        🔹 **Contact for Feedback & Improvements**  
-        📧 Email: your-email@example.com  
-        📌 LinkedIn: [Your LinkedIn Profile](https://www.linkedin.com/)  
-    """)
-
-# Main entry point for the app (Leave this part unchanged)
+# Main entry point for the app
 if __name__ == "__main__":
     # Initialize session state
     if "page" not in st.session_state:
@@ -829,5 +653,3 @@ if __name__ == "__main__":
         home_page()
     elif st.session_state.page == "tools":
         tools_navigation()
-
-
